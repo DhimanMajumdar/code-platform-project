@@ -8,19 +8,52 @@ datasource db {
 }
 
 model User {
-  id        String      @id  @default(uuid())
-  clerkId   String   @unique
-  email     String   @unique
-  role      UserRole @default(USER)
-  firstName String?
-  lastName  String?
-  imageUrl  String?
-
-  problems  Problem[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String          @id @default(uuid())
+  email          String          @unique
+  clerkId        String          @unique
+  createdAt      DateTime        @default(now())
+  firstName      String?
+  imageUrl       String?
+  lastName       String?
+  role           UserRole        @default(USER)
+  updatedAt      DateTime        @updatedAt
+  problems       Problem[]
+  solvedProblems ProblemSolved[]
 
   @@index([role])
+}
+
+model Problem {
+  id                 String          @id @default(uuid())
+  title              String
+  description        String
+  difficulty         Difficulty
+  tags               String[]
+  userId             String
+  examples           Json
+  constraints        String
+  hints              String?
+  editorial          String?
+  testCases          Json
+  codeSnippets       Json
+  referenceSolutions Json
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  solvedBy           ProblemSolved[]
+
+  @@index([difficulty])
+}
+
+model ProblemSolved {
+  id        String   @id @default(uuid())
+  userId    String
+  problemId String
+  createdAt DateTime @default(now())
+  problem   Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId])
 }
 
 enum UserRole {
@@ -33,29 +66,3 @@ enum Difficulty {
   MEDIUM
   HARD
 }
-
-model Problem {
-  id          String       @id @default(uuid())
-  title       String
-  description String
-  difficulty  Difficulty   // EASY, MEDIUM, HARD
-  tags        String[]
-  userId      String       // Creator of the problem
-  examples    Json         // Language-specific examples
-  constraints String
-  hints       String?
-  editorial   String?
-
-  testCases          Json 
-  codeSnippets       Json
-  referenceSolutions Json 
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-@@index([difficulty])
-}
-
