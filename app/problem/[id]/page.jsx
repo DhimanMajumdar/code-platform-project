@@ -39,9 +39,10 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { getJudge0LanguageId } from "@/lib/judge0";
 import { toast } from "sonner";
 import Link from "next/link";
-import { executeCode, getProblemById } from "@/modules/problems/actions";
+import { executeCode, getAllSubmissionByCurrentUserForProblem, getProblemById } from "@/modules/problems/actions";
 import { SubmissionDetails } from "@/modules/problems/components/submission-details";
 import { TestCaseTable } from "@/modules/problems/components/test-case-table";
+import { SubmissionHistory } from "@/modules/problems/components/submission-history";
 
 const getDifficultyColor = (difficulty) => {
   switch (difficulty) {
@@ -85,7 +86,24 @@ const ProblemIdPage = ({ params }) => {
 
     fetchProblem();
   }, [params]);
+  
 
+   useEffect(()=>{
+    const fetchSubmissionHistory = async()=>{
+      try {
+        const resolvedParams = await params;
+        const submissionHistory = await getAllSubmissionByCurrentUserForProblem(resolvedParams.id);
+        console.log(submissionHistory);
+        if (submissionHistory.success) {
+          setSubmissionHistory(submissionHistory.data);
+        }
+      } catch (error) {
+        console.error('Error fetching problem:', error);
+      }
+    }
+
+    fetchSubmissionHistory();
+  },[params]) 
     
 
 
@@ -252,7 +270,7 @@ const ProblemIdPage = ({ params }) => {
                   <TabsContent value="submissions" className="p-6">
                     <div className="text-center py-8 text-muted-foreground">
                       <p>Submission History</p>
-                      
+                      <SubmissionHistory submissions={submissionHistory} />
                     </div>
                   </TabsContent>
                   <TabsContent value="editorial" className="p-6">
@@ -329,16 +347,9 @@ const ProblemIdPage = ({ params }) => {
                     className="flex items-center gap-2"
                   >
                     <Play className="h-4 w-4" />
-                    {isRunning ? "Running..." : "Run"}
+                    {isRunning ? "Submitting..." : "Run & Submit"}
                   </Button>
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="flex items-center gap-2"
-                  >
-                    <Send className="h-4 w-4" />
-                    {isSubmitting ? "Submitting..." : "Submit"}
-                  </Button>
+                  
                 </div>
               </CardContent>
             </Card>

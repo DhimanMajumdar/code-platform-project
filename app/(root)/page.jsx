@@ -9,6 +9,8 @@ import {
   Moon,
   Sun,
   Menu,
+  ChevronFirst,
+  ChevronUpSquareIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -120,20 +122,15 @@ export default async function Home() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button
+              
               size="lg"
               className="bg-amber-500 hover:bg-amber-600 dark:bg-amber-400 dark:hover:bg-amber-500 text-white dark:text-gray-900 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
             >
               <Play className="w-5 h-5 mr-2" />
-              Start Solving
-              <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+              Start Solving and improving
+              <ChevronUpSquareIcon className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-2 border-indigo-300 dark:border-indigo-600 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950"
-            >
-              View Problems
-            </Button>
+            
           </div>
 
           {/* Stats */}
