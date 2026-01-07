@@ -55,9 +55,10 @@ export default async function Home() {
 
   const stats = [
     { number: "1K+", label: "Problems Available" },
-    { number: "5K+", label: "Submissions Executed" },
-    { number: "20+", label: "Languages Supported" },
+    { number: "10K+", label: "Submissions Executed" },
+    { number: "10+", label: "Languages Supported" },
     { number: "Live", label: "Code Evaluation" },
+    
   ];
 
   const problemCategories = [
@@ -276,7 +277,7 @@ export default async function Home() {
             size="lg"
             className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg"
           >
-            Start Solving
+            Aao Code Karen
           </Button>
         </div>
       </section>
