@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 Solvex - Modern Coding Platform
 
-## Getting Started
+Solvex is a high-performance, feature-rich coding platform designed for developers to practice, solve, and create programming problems. Built with a modern tech stack, it provides a seamless LeetCode-like experience with real-time code execution, submission history, and a premium developer UI.
 
-First, run the development server:
+![Solvex Banner](public/image.png)
 
+## ✨ Features
+
+- **💻 Advanced Code Editor**: Integrated Monaco Editor (the power behind VS Code) for a premium coding experience.
+- **⚡ Real-time Execution**: Instant code execution and test case validation via Judge0 API.
+- **🔐 Secure Authentication**: Robust user management and social login powered by Clerk.
+- **📊 Progress Tracking**: Detailed submission history and problem-solving statistics.
+- **🛠️ Problem Creator**: Tools for admins and users to create and manage custom coding challenges.
+- **📂 Playlists & Collections**: Organize problems into curated lists for structured learning.
+- **🎨 Premium UI/UX**: Modern, responsive design built with Tailwind CSS 4 and Radix UI primitives.
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Database**: [PostgreSQL](https://postgresql.org/) (Hosted on [Neon](https://neon.tech/))
+- **ORM**: [Prisma](https://prisma.io/)
+- **Authentication**: [Clerk](https://clerk.com/)
+- **Code Execution**: [Judge0](https://ce.judge0.com/)
+- **Editor**: [Monaco Editor](https://microsoft.github.io/monaco-editor/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/), [Shadcn UI](https://ui.shadcn.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- A Neon Database account
+- A Clerk account
+- Judge0 API endpoint
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/yourusername/solvex.git
+cd solvex
+```
+
+### 2. Install dependencies
+```bash
+npm install
+```
+
+### 3. Setup Environment Variables
+Create a `.env` file in the root directory and add the following:
+
+```env
+DATABASE_URL="your_neon_connection_string"
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_pub_key
+CLERK_SECRET_KEY=your_clerk_secret_key
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+JUDGE0_API_URL=https://ce.judge0.com
+```
+
+### 4. Database Setup
+Sync your schema with the database:
+```bash
+npx prisma db push
+npx prisma generate
+```
+
+### 5. Run the development server
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 📦 Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The project is optimized for deployment on **Vercel**.
 
-## Learn More
+1. Push your code to a GitHub repository.
+2. Create a new project on Vercel and link your repository.
+3. Add your environment variables in the Vercel project settings.
+4. Vercel will automatically run `npm run build`, which includes `prisma generate`.
 
-To learn more about Next.js, take a look at the following resources:
+## 🤝 Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📄 License
 
-## Deploy on Vercel
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Built with ❤️ by [Dhiman Majumdar](https://github.com/DhimanMajumdar)
