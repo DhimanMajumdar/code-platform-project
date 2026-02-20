@@ -74,7 +74,6 @@ const ProblemIdPage = ({ params }) => {
         const resolvedParams = await params;
         const problemData = await getProblemById(resolvedParams.id);
         if (problemData.success) {
-          console.log(problemData.data);
           setProblem(problemData.data);
 
           setCode(problemData.data.codeSnippets[selectedLanguage] || "");
@@ -86,14 +85,13 @@ const ProblemIdPage = ({ params }) => {
 
     fetchProblem();
   }, [params]);
-  
 
-   useEffect(()=>{
-    const fetchSubmissionHistory = async()=>{
+
+  useEffect(() => {
+    const fetchSubmissionHistory = async () => {
       try {
         const resolvedParams = await params;
         const submissionHistory = await getAllSubmissionByCurrentUserForProblem(resolvedParams.id);
-        console.log(submissionHistory);
         if (submissionHistory.success) {
           setSubmissionHistory(submissionHistory.data);
         }
@@ -103,8 +101,8 @@ const ProblemIdPage = ({ params }) => {
     }
 
     fetchSubmissionHistory();
-  },[params]) 
-    
+  }, [params])
+
 
 
   useEffect(() => {
@@ -139,7 +137,7 @@ const ProblemIdPage = ({ params }) => {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => { };
 
   if (!problem) {
     return (
@@ -349,7 +347,7 @@ const ProblemIdPage = ({ params }) => {
                     <Play className="h-4 w-4" />
                     {isRunning ? "Submitting..." : "Run & Submit"}
                   </Button>
-                  
+
                 </div>
               </CardContent>
             </Card>
@@ -394,7 +392,7 @@ const ProblemIdPage = ({ params }) => {
               </CardContent>
             </Card>
 
- {/* Test Results and Submission Details */}
+            {/* Test Results and Submission Details */}
             {executionResponse && executionResponse.submission && (
               <div className="space-y-4 mt-4">
                 <SubmissionDetails submission={executionResponse.submission} />

@@ -37,7 +37,7 @@ export const onBoardUser=async()=>{
             message:"User onboarded successfully!!"
         }
     } catch (error) {
-        console.log("❌ Error onboarding the user!!");
+        
         return {
             success:false,
             error:"Failed to onboard user!!"
@@ -65,7 +65,7 @@ export const currentUserRole=async()=>{
         })
         return userRole.role;
     } catch (error) {
-        console.log("❌ Error onboarding the user!!");
+        
         return {
             success:false,
             error:"Failed to onboard user!!"

@@ -84,14 +84,6 @@ export async function POST(request) {
       // Step 2.6: Validate that each test case passed (status.id === 3)
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
-        console.log(`Test case ${i + 1} details:`, {
-          input: submissions[i].stdin,
-          expectedOutput: submissions[i].expected_output,
-          actualOutput: result.stdout,
-          status: result.status,
-          language: language,
-          error: result.stderr || result.compile_output,
-        });
         
         if (result.status.id !== 3) {
           return NextResponse.json(
