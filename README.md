@@ -1,6 +1,6 @@
 # 🚀 Solvex - Modern Coding Platform
 
-Solvex is a high-performance, feature-rich coding platform designed for developers to practice, solve, and create programming problems. Built with a modern tech stack, it provides a seamless LeetCode-like experience with real-time code execution, submission history, and a premium developer UI.
+Solvex is a high-performance, feature-rich coding platform designed for developers to practice, solve, and create programming problems. Built with a modern tech stack, it provides a seamless interactive coding experience with real-time code execution, submission history, and a premium developer UI.
 
 ![Solvex Banner](public/image.png)
 
@@ -8,9 +8,12 @@ Solvex is a high-performance, feature-rich coding platform designed for develope
 
 - **💻 Advanced Code Editor**: Integrated Monaco Editor (the power behind VS Code) for a premium coding experience.
 - **⚡ Real-time Execution**: Instant code execution and test case validation via Judge0 API.
+- **🤖 High-Speed AI Assistance**: Powered by **Groq (llama-3.1-8b-instant)** for real-time tutoring and complexity reviews.
+- **🧑‍🏫 Socratic AI Coding Tutor**: A sidebar drawer component that provides pedagogical hints and guidance on editor code without spoiling the answer.
+- **🔍 AI Complexity Auditor & Reviewer**: Locks until all test cases pass, then performs O(f(N)) time/space complexity analysis and suggests optimized refactored solutions.
 - **🔐 Secure Authentication**: Robust user management and social login powered by Clerk.
 - **📊 Progress Tracking**: Detailed submission history and problem-solving statistics.
-- **🛠️ Problem Creator**: Tools for admins and users to create and manage custom coding challenges.
+- **🛠️ Problem Creator**: Tools for admins and users to create and manage custom coding challenges with tag/category dropdowns.
 - **📂 Playlists & Collections**: Organize problems into curated lists for structured learning.
 - **🎨 Premium UI/UX**: Modern, responsive design built with Tailwind CSS 4 and Radix UI primitives.
 
@@ -58,6 +61,9 @@ NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 JUDGE0_API_URL=https://ce.judge0.com
+
+# Groq API Configuration (for AI features)
+GROQ_API_KEY=your_groq_api_key
 ```
 
 ### 4. Database Setup

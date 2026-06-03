@@ -88,7 +88,7 @@ export default function AboutPage() {
             <span className="font-semibold text-foreground">
               Dhiman Majumdar
             </span>{" "}
-            — because LeetCode wasn’t stressful enough 😁.
+            — because competitive coding wasn’t stressful enough 😁.
           </p>
         </div>
       </div>
