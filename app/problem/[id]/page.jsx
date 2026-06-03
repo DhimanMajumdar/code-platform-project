@@ -211,7 +211,11 @@ const ProblemIdPage = ({ params }) => {
 
       setExecutionResponse(res);
       if (res.success) {
-        toast.success(res.message);
+        if (res.submission?.status === "Accepted") {
+          toast.success("Accepted! All test cases passed successfully.");
+        } else {
+          toast.error("Wrong Answer! Some test cases failed.");
+        }
       }
     } catch (error) {
       console.error("Error running code:", error);
