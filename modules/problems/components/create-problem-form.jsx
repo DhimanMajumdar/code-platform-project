@@ -31,6 +31,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const problemSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -439,6 +440,24 @@ public class Main {
   },
 };
 
+const PREDEFINED_TAGS = [
+  "Array",
+  "String",
+  "Hashmap",
+  "Tree",
+  "Graph",
+  "Dynamic Programming",
+  "Greedy",
+  "Binary Search",
+  "Two Pointers",
+  "Sorting",
+  "Stack",
+  "Queue",
+  "Bit Manipulation",
+  "Recursion",
+  "Math"
+];
+
 const CodeEditor = ({ value, onChange, language = "javascript" }) => {
   // Map language names to Monaco Editor language IDs
   const languageMap = {
@@ -477,7 +496,7 @@ const CodeEditor = ({ value, onChange, language = "javascript" }) => {
 
 const CreateProblemForm = () => {
   const router = useRouter();
-  const [sampleType, setSampleType] = useState("DP");
+  const [sampleType, setSampleType] = useState("Dynamic Programming");
   const [isLoading, setIsloading] = useState(false);
 
   const form = useForm({
@@ -521,7 +540,7 @@ const CreateProblemForm = () => {
     name: "testCases",
   });
 
-   const {
+  const {
     fields: tagFields,
     append: appendTag,
     remove: removeTag,
@@ -531,35 +550,82 @@ const CreateProblemForm = () => {
     name: "tags",
   });
 
-  const onSubmit = async(values)=>{
+  const currentTags = form.watch("tags") || [];
+
+  const handlePredefinedTagClick = (tag) => {
+    const currentTagsVal = form.getValues("tags") || [];
+    if (!currentTagsVal.includes(tag)) {
+      if (currentTagsVal.length === 1 && currentTagsVal[0] === "") {
+        replaceTags([tag]);
+      } else {
+        appendTag(tag);
+      }
+    } else {
+      const index = currentTagsVal.indexOf(tag);
+      if (index > -1) {
+        removeTag(index);
+      }
+    }
+  };
+
+  const isTagSelected = (tag) => currentTags.includes(tag);
+
+  const onSubmit = async (values) => {
     try {
-        setIsloading(true)
-        const response = await fetch("/api/create-problem",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(values)
-        })
-        toast.success(response.message || "Problem created successfully")
-        router.push("/problems")
+      setIsloading(true)
+      const response = await fetch("/api/create-problem", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values)
+      })
+      toast.success(response.message || "Problem created successfully")
+      router.push("/problems")
     } catch (error) {
-          console.error("Error creating problem:", error);
+      console.error("Error creating problem:", error);
       toast.error(error.message || "Failed to create problem");
     }
-    finally{
-         setIsloading(false);
+    finally {
+      setIsloading(false);
     }
   }
 
-   const loadSampleData = () => {
-    const sampleData = sampleType === "DP" ? sampledpData : sampleStringProblem;
+  const loadSampleData = () => {
+    const sampleData = sampleType === "Dynamic Programming" ? sampledpData : sampleStringProblem;
     replaceTags(sampleData.tags.map((tag) => tag));
     replaceTestCases(sampleData.testCases.map((tc) => tc));
     reset(sampleData);
   };
 
+  const resetToDefault = (category) => {
+    replaceTags([category || ""]);
+    replaceTestCases([{ input: "", output: "" }]);
+    reset({
+      title: "",
+      description: "",
+      difficulty: "EASY",
+      testCases: [{ input: "", output: "" }],
+      tags: [category || ""],
+      examples: {
+        JAVASCRIPT: { input: "", output: "", explanation: "" },
+        PYTHON: { input: "", output: "", explanation: "" },
+        JAVA: { input: "", output: "", explanation: "" },
+      },
+      codeSnippets: {
+        JAVASCRIPT: "function solution() {\n  // Write your code here\n}",
+        PYTHON: "def solution():\n    # Write your code here\n    pass",
+        JAVA: "public class Solution {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}",
+      },
+      referenceSolutions: {
+        JAVASCRIPT: "// Add your reference solution here",
+        PYTHON: "# Add your reference solution here",
+        JAVA: "// Add your reference solution here",
+      },
+    });
+  };
+
 
   return (
-      <div className="container mx-auto py-8 px-4 max-w-7xl">
+    <div className="container mx-auto py-8 px-4 max-w-7xl">
       <Card className="shadow-xl">
         <CardHeader className="pb-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -568,37 +634,47 @@ const CreateProblemForm = () => {
               Create Problem
             </CardTitle>
 
-            <div className="flex flex-col md:flex-row gap-3">
-              <div className="flex border rounded-md">
-                <Button
-                  type="button"
-                  variant={sampleType === "DP" ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-r-none"
-                  onClick={() => setSampleType("DP")}
+            <div className="flex flex-col md:flex-row gap-3 items-center">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-zinc-500 dark:text-zinc-400">Category:</span>
+                <Select 
+                  value={sampleType} 
+                  onValueChange={(val) => {
+                    setSampleType(val);
+                    resetToDefault(val);
+                  }}
                 >
-                  DP Problem
-                </Button>
-                <Button
-                  type="button"
-                  variant={sampleType === "string" ? "default" : "outline"}
-                  size="sm"
-                  className="rounded-l-none"
-                  onClick={() => setSampleType("string")}
-                >
-                  String Problem
-                </Button>
+                  <SelectTrigger className="w-[200px]">
+                    <SelectValue placeholder="Select Category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Dynamic Programming">Dynamic Programming</SelectItem>
+                    <SelectItem value="String">String</SelectItem>
+                    <SelectItem value="Tree">Tree</SelectItem>
+                    <SelectItem value="Hashmap">Hashmap</SelectItem>
+                    <SelectItem value="Array">Array</SelectItem>
+                    <SelectItem value="Graph">Graph</SelectItem>
+                    <SelectItem value="Linked List">Linked List</SelectItem>
+                    <SelectItem value="Stack">Stack</SelectItem>
+                    <SelectItem value="Queue">Queue</SelectItem>
+                    <SelectItem value="Recursion">Recursion</SelectItem>
+                    <SelectItem value="Math">Math</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={loadSampleData}
-                className="gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Load Sample
-              </Button>
+
+              {(sampleType === "Dynamic Programming" || sampleType === "String") && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={loadSampleData}
+                  className="gap-2 shrink-0 h-10"
+                >
+                  <Download className="w-4 h-4" />
+                  Load Sample
+                </Button>
+              )}
             </div>
           </div>
           <Separator />
@@ -606,6 +682,14 @@ const CreateProblemForm = () => {
 
         <CardContent className="p-6">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            {/* Guidance Alert */}
+            <div className="bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/60 p-4 rounded-xl text-sm flex gap-3 items-start">
+              <Lightbulb className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-semibold text-amber-800 dark:text-amber-300">💡 Important Tip:</span> Please load one of the samples (<strong>DP Problem</strong> or <strong>String Problem</strong>) first to see how the starter code, test cases, and reference solutions need to be structured. Ensure your custom problem follows similar input/output format patterns for all languages to validate successfully.
+              </div>
+            </div>
+
             {/* Basic Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
@@ -713,6 +797,33 @@ const CreateProblemForm = () => {
                 </div>
               </CardHeader>
               <CardContent>
+                {/* Predefined Quick Select Tags */}
+                <div className="mb-6">
+                  <Label className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 block mb-2">
+                    Quick Select Tags:
+                  </Label>
+                  <div className="flex flex-wrap gap-2">
+                    {PREDEFINED_TAGS.map((tag) => {
+                      const selected = isTagSelected(tag);
+                      return (
+                        <Badge
+                          key={tag}
+                          variant={selected ? "default" : "outline"}
+                          className={cn(
+                            "cursor-pointer transition-all duration-150 py-1 px-3 text-xs select-none font-medium",
+                            selected
+                              ? "bg-amber-600 hover:bg-amber-700 text-white border-transparent shadow-sm"
+                              : "hover:bg-amber-100/50 dark:hover:bg-amber-900/30 text-zinc-700 dark:text-zinc-300 border-zinc-300 dark:border-zinc-700"
+                          )}
+                          onClick={() => handlePredefinedTagClick(tag)}
+                        >
+                          {tag}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tagFields.map((field, index) => (
                     <div key={field.id} className="flex gap-2 items-center">
